@@ -1,21 +1,33 @@
 import React, { useState, FormEvent } from "react";
+import Link from 'next/link';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import AuthAPI from "../../lib/api/auth";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('sjahn@qoo10.com');
+  const [password, setPassword] = useState('rewq1234');
 
   const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value);
   const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('### email: ', email);
-    console.log('### name: ', name);
-    console.log('### password: ', password);
+
+    const resp = await AuthAPI.login({
+      email: email,
+      password: password
+    });
+
+    // if (resp.status == 200) {
+    //   localStorage.setItem();
+    // }
+
+    // console.log('### email: ', email);
+    // console.log('### password: ', password);
+    console.log('### response: ', resp);
   }
 
   return (
@@ -43,11 +55,15 @@ const Login = () => {
                 onChange={handlePassword}
               />
             </Form.Group>
-            <Button
-              type="submit"
-              variant="primary"
-            >Signin</Button>            
+            <div className="d-grid gap-2">
+              <Button
+                type="submit"
+                variant="primary"
+              >Sign In</Button>
+            </div>
           </Form>
+          <hr />
+          <Link href={ '/auth/register' }>Sign Up</Link>
         </Col>
       </Row>
     </>

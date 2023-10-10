@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_API_URL } from "../../utils/constants";
+import { BASE_API_URL, TOKEN_KEY } from "../../config/constants";
 
 export type AuthRegister = {
   email: string;
@@ -12,21 +12,26 @@ export type AuthLogin = {
   password: string;
 }
 
-const instance = axios.create({
+const _axios = axios.create({
   baseURL: BASE_API_URL
 });
 
 const AuthAPI = {
   register: async (auth: AuthRegister) => {
-    return await instance.post(
-      `${BASE_API_URL}/auth/register`,
-      auth
-    ).catch((e) => {
+    return await _axios.post('/auth/register', auth).catch((e) => {
       return e.response
     })
   },
-  login: (auth: AuthLogin) => {
-    console.log(auth);
+  login: async (auth: AuthLogin) => {
+    const { data, status } = await _axios.post('/auth/login', auth).catch((e) => {
+      return e.response
+    })
+
+    console.log(data);
+    if (status == 200) {
+      localStorage.setItem(TOKEN_KEY, data.token);
+    }
+    return data;
   }
 }
 

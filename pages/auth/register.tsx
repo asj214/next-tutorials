@@ -1,52 +1,45 @@
 import React, { useState, FormEvent } from "react";
+import { useRouter } from 'next/router';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
 import AuthAPI from "../../lib/api/auth";
 
 const Register = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [alerts, setAlerts] = useState();
+  const router = useRouter();
+  const [inputs, setInputs] = useState({
+    email: '',
+    name: '',
+    password: ''
+  });
 
-  const handleName = (event: React.ChangeEvent<HTMLInputElement>) => setName(event.target.value);
-  const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value);
-  const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => setPassword(event.target.value);
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setInputs({
+      ...inputs,
+      [name]: value
+    });
+  };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const resp = await AuthAPI.register({
-      email: email,
-      name: name,
-      password: password
-    });
-
+    const resp = await AuthAPI.register(inputs);
     if (resp.status === 201) {
-      console.log('move login page');
+      router.push('/auth/login');
     } else {
-      setAlerts(resp.data);
+      const fields = Object.keys(resp.data);
+      const message = `${fields.join()} 항목을 확인바람`;
+      alert(message);
     }
+
   }
 
   return (
     <>
       <Row className="justify-content-md-center" style={{ marginTop: '25%' }}>
         <Col md={8} lg={4}>
-          {/* {
-            Object.entries(alerts).map(([key, value], i) => {
-              return (
-                <>
-                  <Alert key="danger" variant="danger">
-                    This is a danger alert—check it out!
-                  </Alert>
-                </>
-              );
-            })
-          } */}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="register.email">
               <Form.Label>Email address</Form.Label>
@@ -54,8 +47,8 @@ const Register = () => {
                 type="email"
                 placeholder="name@example.com"
                 required
-                value={email}
-                onChange={handleEmail}
+                value={inputs.email}
+                onChange={onChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="register.name">
@@ -63,8 +56,8 @@ const Register = () => {
               <Form.Control
                 type="text"
                 required
-                value={name}
-                onChange={handleName}
+                value={inputs.name}
+                onChange={onChange}
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="register.password">
@@ -73,8 +66,8 @@ const Register = () => {
                 type="password"
                 required
                 placeholder="Password"
-                value={password}
-                onChange={handlePassword}
+                value={inputs.password}
+                onChange={onChange}
               />
             </Form.Group>
             <Button
