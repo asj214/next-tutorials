@@ -5,6 +5,7 @@ const useHasMounted = () => {
   useEffect(() => {
     setHasMounted(true);
   }, []);
+  return hasMounted;
 }
 
 export default useHasMounted;
