@@ -47,6 +47,7 @@ const Register = () => {
                 type="email"
                 placeholder="name@example.com"
                 required
+                name="email"
                 value={inputs.email}
                 onChange={onChange}
               />
@@ -56,6 +57,7 @@ const Register = () => {
               <Form.Control
                 type="text"
                 required
+                name="name"
                 value={inputs.name}
                 onChange={onChange}
               />
@@ -65,6 +67,7 @@ const Register = () => {
               <Form.Control
                 type="password"
                 required
+                name="password"
                 placeholder="Password"
                 value={inputs.password}
                 onChange={onChange}

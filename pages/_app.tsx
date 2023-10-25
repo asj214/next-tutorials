@@ -8,7 +8,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const { fetchUser } = useAuthStore();
 
   useEffect(() => {
-    console.log('### _app.tst::useEffect')
     fetchUser()
   }, []);
   return (

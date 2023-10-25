@@ -1,5 +1,5 @@
-import axios from "axios";
-import { BASE_API_URL, TOKEN_KEY } from "../../config/constants";
+import _axios from "../axios";
+import { TOKEN_KEY } from "../../config/constants";
 
 export type AuthRegister = {
   email: string;
@@ -11,18 +11,6 @@ export type AuthLogin = {
   email: string;
   password: string;
 }
-
-const _axios = axios.create({
-  baseURL: BASE_API_URL
-});
-
-_axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem(TOKEN_KEY);
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
 
 const AuthAPI = {
   register: async (auth: AuthRegister) => {
