@@ -27,7 +27,7 @@ const PostDetail = () => {
   }
 
   useEffect(() => {
-    if (hasMounted && id) {
+    if (hasMounted) {
       getPostDetail(Number(id));
     }
   }, [id]);
