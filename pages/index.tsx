@@ -1,3 +1,11 @@
+import { useAuthStore } from "../utils/useAuthStore";
+
 export default function Page() {
-  return <h1>Hello, Next.js</h1>
+  const { user } = useAuthStore();
+
+  return (
+    <>
+      {user ? (<h1>Hello, {user.name}</h1>) : (<h1>Hello, Next.js</h1>)}
+    </>
+  );
 }

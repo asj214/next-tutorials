@@ -16,6 +16,14 @@ const _axios = axios.create({
   baseURL: BASE_API_URL
 });
 
+_axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 const AuthAPI = {
   register: async (auth: AuthRegister) => {
     return await _axios.post('/auth/register', auth).catch((e) => {
@@ -23,15 +31,19 @@ const AuthAPI = {
     })
   },
   login: async (auth: AuthLogin) => {
-    const { data, status } = await _axios.post('/auth/login', auth).catch((e) => {
+    const resp = await _axios.post('/auth/login', auth).catch((e) => {
       return e.response
     })
-
-    console.log(data);
-    if (status == 200) {
-      localStorage.setItem(TOKEN_KEY, data.token);
+    if (resp.status == 200) {
+      localStorage.setItem(TOKEN_KEY, resp.data.token);
     }
-    return data;
+    return resp;
+  },
+  fetchUser: async () => {
+    return await _axios.get('/auth/me').catch((e) => {
+      localStorage.removeItem(TOKEN_KEY);
+      return e.response
+    })
   }
 }
 

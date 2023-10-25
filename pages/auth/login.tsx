@@ -1,4 +1,5 @@
 import React, { useState, FormEvent } from "react";
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -7,6 +8,7 @@ import Button from 'react-bootstrap/Button';
 import AuthAPI from "../../lib/api/auth";
 
 const Login = () => {
+  const router = useRouter();
   const [email, setEmail] = useState('sjahn@qoo10.com');
   const [password, setPassword] = useState('rewq1234');
 
@@ -21,13 +23,10 @@ const Login = () => {
       password: password
     });
 
-    // if (resp.status == 200) {
-    //   localStorage.setItem();
-    // }
-
-    // console.log('### email: ', email);
-    // console.log('### password: ', password);
-    console.log('### response: ', resp);
+    if (resp.status == 200) {
+      router.push('/');
+      console.log('###');
+    }
   }
 
   return (
@@ -63,7 +62,7 @@ const Login = () => {
             </div>
           </Form>
           <hr />
-          <Link href={ '/auth/register' }>Sign Up</Link>
+          <Link href={ '/auth/register' } style={{ textDecoration: 'none' }}>Sign Up</Link>
         </Col>
       </Row>
     </>
