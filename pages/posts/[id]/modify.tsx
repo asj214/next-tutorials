@@ -47,7 +47,7 @@ const PostModify = () => {
   }
 
   useEffect(() => {
-    if (hasMounted) {
+    if (hasMounted && id) {
       getPostDetail(Number(id));
     }
   }, [id]);
