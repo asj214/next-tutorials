@@ -4,7 +4,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import useHasMounted from "../../../utils/useHasMounted";
 // import { Post } from "../../../types";
 import { Post, PostAPI } from "../../../lib/api/post";
 
@@ -15,13 +14,11 @@ const PostModify = () => {
     title: '',
     body: ''
   });
-  const hasMounted = useHasMounted();
 
   const getPostDetail = async (id: number) => {
     const resp = await PostAPI.detail(id);
     if (resp.status === 200) {
       setPost(resp.data)
-      console.log(post)
     }
   }
 
@@ -47,7 +44,7 @@ const PostModify = () => {
   }
 
   useEffect(() => {
-    if (hasMounted) {
+    if (id) {
       getPostDetail(Number(id));
     }
   }, [id]);

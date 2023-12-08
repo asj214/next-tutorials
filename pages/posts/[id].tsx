@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -6,15 +6,13 @@ import Button from 'react-bootstrap/Button';
 import { Post } from "../../types";
 import { PostAPI } from "../../lib/api/post";
 import { useAuthStore } from "../../utils/useAuthStore";
-import useHasMounted from "../../utils/useHasMounted";
 
 const PostDetail = () => {
   const router = useRouter();
   const { id } = router.query;
   const [post, setPost] = useState<Post>();
-  const hasMounted = useHasMounted();
   const { user } = useAuthStore();
-  
+
   const getPostDetail = async (id: number) => {
     const resp = await PostAPI.detail(id);
     if (resp.status === 200) {
@@ -26,8 +24,8 @@ const PostDetail = () => {
     await PostAPI.delete(Number(id));
   }
 
-  useEffect(() => {
-    if (hasMounted) {
+  useLayoutEffect(() => {
+    if (id) {
       getPostDetail(Number(id));
     }
   }, [id]);

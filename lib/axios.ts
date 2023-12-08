@@ -13,4 +13,15 @@ _axios.interceptors.request.use((config) => {
   return config;
 });
 
+_axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    console.log("interceptor >", error);
+    return Promise.reject(error);
+  }
+);
+
+
 export default _axios;
